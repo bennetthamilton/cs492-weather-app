@@ -10,6 +10,8 @@ class ForecastWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final forecastProvider = context.watch<ForecastProvider>();
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     if (forecastProvider.forecasts.isEmpty) {
       return const Center(
@@ -23,14 +25,33 @@ class ForecastWidget extends StatelessWidget {
       );
     }
 
-    return Column(
-      children: const [
+    if (isLandscape) {
+      return Row(
+        children: const [
+          Expanded(
+            flex: 3,
+            child: DetailedForecast(),
+          ),
+          Expanded(
+            flex: 2,
+            child: ForecastsRowWidget(
+              isLandscape: true,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return const Column(
+      children: [
         Expanded(
           flex: 2,
           child: DetailedForecast(),
         ),
         Expanded(
-          child: ForecastsRowWidget(),
+          child: ForecastsRowWidget(
+            isLandscape: false,
+          ),
         ),
       ],
     );

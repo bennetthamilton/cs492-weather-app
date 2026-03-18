@@ -16,6 +16,8 @@ class ForecastTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeProvider themeProvider = context.read<ThemeProvider>();
     final theme = Theme.of(context);
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     final accentColor = forecast.isDaytime
         ? themeProvider.accentColor
@@ -31,7 +33,7 @@ class ForecastTileWidget extends StatelessWidget {
           context.read<ForecastProvider>().setActiveForecast(forecast);
         },
         child: SizedBox(
-          width: 150,
+          width: isLandscape ? double.infinity : 150,
           child: Card(
             elevation: 3,
             shape: RoundedRectangleBorder(
