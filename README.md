@@ -94,7 +94,7 @@ The app should now build and launch on your selected device.
 
 ## Demonstration Video
 
-[insert video link]
+[![Watch the demo](https://img.youtube.com/vi/v2ENtjBdm4U/0.jpg)](https://youtu.be/v2ENtjBdm4U)
 
 ---
 
@@ -106,3 +106,48 @@ The app should now build and launch on your selected device.
 - Pexels image library
 
 ---
+## Changelog
+
+**UI Enhancements**
+- Implemented dynamic image retrieval using the Pexels API:
+  - Images now reflect **location, time of day, and forecast conditions**
+  - Added **randomization** for more visual variety
+- Introduced a **new color palette** and updated app branding
+- Simplified layout into a **single scrollable screen** for improved usability
+- Moved theme toggle to the bottom of the page to reduce visual clutter
+- Removed tab-based navigation to keep focus on the core weather experience
+- Added **responsive layouts**:
+  - Landscape mode reorganizes forecast components for better readability
+  - Widgets dynamically resize across different screen sizes
+- Improved detailed forecast layout to prioritize key information:
+  - Forecast name, city, icon, date, and temperature
+
+**User Experience Improvements**
+- Removed redundant controls:
+  - Eliminated "Set Location" and "Clear" buttons
+- Improved location handling:
+  - Automatically sets location after permissions are granted
+  - Redirects users to system settings if permissions were previously denied
+
+---
+
+### Refactoring & Technical Improvements
+
+- Centralized theming via `theme_provider.dart`
+- Removed unused file: `location_provider_json.dart`
+- Reorganized project structure for better clarity and scalability
+- Renamed files for improved readability outside of folder context
+- Enabled deployment and testing on a **physical iOS device**
+- Updated and improved project documentation (`README.md`)
+
+---
+
+## Future Work
+
+- Adjust detailed forecast widget to include date and update overall layout
+- Automatically remove duplicate locations
+- Display forecasts of selected date hour-by-hour
+- Toggle temperature unit scale (Fahrenheit vs Celsius)
+- Display temperature highs and lows
+- Include additional metrics (perciptation, humidity, air quality, etc)
+- Create custom weather icons, logos, brand name, etc.
