@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weatherapp/providers/location_provider.dart';
-import 'package:weatherapp/providers/theme_provider.dart';
+import 'package:weatherapp/app/theme/theme_provider.dart';
 
 class WeatherAppBar extends StatelessWidget implements PreferredSizeWidget {
   const WeatherAppBar({

@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
-import 'location.dart';
+import '../models/location_model.dart';
 
 const dbName = 'location.db';
 const sqlCreateTablePath = 'assets/sql/create.sql';

@@ -1,0 +1,77 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:weatherapp/providers/forecast_provider.dart';
+import 'package:weatherapp/providers/location_provider.dart';
+import 'package:weatherapp/app/theme/theme_provider.dart';
+import 'package:weatherapp/widgets/layout/weather_app_bar.dart';
+import 'package:weatherapp/widgets/layout/weather_body.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>
+    with TickerProviderStateMixin {
+  late final TabController _tabController;
+  bool locationSet = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final locationProvider = context.read<LocationProvider>();
+    locationProvider.openDatabase();
+
+    final themeProvider = context.read<ThemeProvider>();
+    themeProvider.loadDarkModePrefs();
+
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.index = 1;
+
+    _tabController.addListener(() {
+      if (!locationSet) {
+        _tabController.animateTo(1);
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final locationProvider = context.watch<LocationProvider>();
+    final forecastProvider = context.read<ForecastProvider>();
+
+    if (locationProvider.location != null) {
+      locationSet = true;
+      forecastProvider.getForecasts(locationProvider.location);
+    } else {
+      locationSet = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: WeatherAppBar(
+        title: widget.title,
+        tabController: _tabController,
+      ),
+      body: WeatherAppBody(
+        tabController: _tabController,
+      ),
+    );
+  }
+}

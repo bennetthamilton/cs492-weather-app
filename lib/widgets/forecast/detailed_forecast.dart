@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weatherapp/models/forecast.dart';
-import 'package:weatherapp/models/pexels_image.dart';
+import 'package:weatherapp/models/forecast_model.dart';
+import 'package:weatherapp/models/pexels_image_model.dart';
 import 'package:weatherapp/providers/forecast_provider.dart';
 import 'package:weatherapp/providers/location_provider.dart';
-import 'package:weatherapp/providers/theme_provider.dart';
-import 'package:weatherapp/widgets/forecast/detailed_forecast/detailed_forecast_text.dart';
+import 'package:weatherapp/app/theme/theme_provider.dart';
+import 'package:weatherapp/widgets/forecast/detailed_forecast_text.dart';
 
 class DetailedForecast extends StatefulWidget {
   const DetailedForecast({super.key});

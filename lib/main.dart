@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:weatherapp/providers/forecast_provider.dart';
 import 'package:weatherapp/providers/location_provider.dart';
-import 'package:weatherapp/providers/theme_provider.dart';
-import 'package:weatherapp/widgets/weather_ui/weather_app_bar.dart';
-import 'package:weatherapp/widgets/weather_ui/weather_body.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:weatherapp/app/theme/theme_provider.dart';
+
+import 'package:weatherapp/screens/home_screen.dart';
 
 void main() async {
-    WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is initialized
-    try {
-      await dotenv.load(fileName: ".env"); // Load environment variables
-    } catch (e) {
-      throw Exception('Error loading .env file: $e'); // Print error if any
-    }
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => LocationProvider()),
-    ChangeNotifierProvider(create: (context) => ForecastProvider()),
-    ChangeNotifierProvider(create: (context) => ThemeProvider()),
-  ], child: const MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    throw Exception('Error loading .env file: $e');
+  }
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
+        ChangeNotifierProvider(create: (_) => ForecastProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -35,60 +42,7 @@ class MyApp extends StatelessWidget {
       theme: themeProvider.lightTheme,
       darkTheme: themeProvider.darkTheme,
       themeMode: themeProvider.darkMode ? ThemeMode.dark : ThemeMode.light,
-      home: const MyHomePage(title: 'WeatherApp'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  late final TabController _tabController;
-  bool locationSet = false;
-
-  @override
-  void initState() {
-    super.initState();
-    final locationProvider = context.read<LocationProvider>();
-    locationProvider.openDatabase();
-    final themeProvider = context.read<ThemeProvider>();
-    themeProvider.loadDarkModePrefs();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.index = 1;
-    _tabController.addListener(() {
-      if (!locationSet) {
-        _tabController.animateTo(1);
-      }
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final locationProvider = context.watch<LocationProvider>();
-    final forecastProvider = context.read<ForecastProvider>();
-
-    if (locationProvider.location != null) {
-      locationSet = true;
-      forecastProvider.getForecasts(locationProvider.location);
-    } else {
-      locationSet = false;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: WeatherAppBar(title: widget.title, tabController: _tabController),
-      body: WeatherAppBody(tabController: _tabController),
+      home: const HomeScreen(title: 'WeatherApp'),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weatherapp/widgets/forecast/forecast.dart';
-import 'package:weatherapp/widgets/location/set_location/location.dart';
+import 'package:weatherapp/widgets/forecast/forecast_section.dart';
+import 'package:weatherapp/widgets/location/location_search_field.dart';
 
 class WeatherAppBody extends StatelessWidget {
   const WeatherAppBody({
