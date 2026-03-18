@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:weatherapp/providers/location_provider.dart';
-import 'package:weatherapp/widgets/location/location_buttons.dart';
 import 'package:weatherapp/widgets/location/saved_locations_list.dart';
 
 class LocationWidget extends StatefulWidget {
@@ -52,11 +51,6 @@ class _LocationWidgetState extends State<LocationWidget> {
     }
   }
 
-  void _clearLocation() {
-    _locationActions.setLocationFromString(null);
-    _locationController.text = "";
-  }
-
   @override
   Widget build(BuildContext context) {
     final locationProvider = context.watch<LocationProvider>();
@@ -81,10 +75,12 @@ class _LocationWidgetState extends State<LocationWidget> {
               textInputAction: TextInputAction.search,
               onSubmitted: (_) => _setLocation(),
             ),
-            LocationButtons(
-              setLocation: _setLocation,
-              setLocationFromGps: _locationActions.setLocationFromGps,
-              clearLocation: _clearLocation,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: ElevatedButton(
+                onPressed: _locationActions.setLocationFromGps,
+                child: const Text("Use Current Location"),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
