@@ -12,15 +12,21 @@ class WeatherAppBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.infinity,
-      width: 500,
-      child: TabBarView(
-        controller: _tabController,
-        children: [
-          ForecastWidget(),
-          LocationWidget(),
-        ],
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SizedBox(
+            height: constraints.maxHeight,
+            width: constraints.maxWidth,
+            child: TabBarView(
+              controller: _tabController,
+              children: const [
+                ForecastWidget(),
+                LocationWidget(),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

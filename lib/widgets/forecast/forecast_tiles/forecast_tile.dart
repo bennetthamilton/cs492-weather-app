@@ -31,8 +31,7 @@ class ForecastTileWidget extends StatelessWidget {
           context.read<ForecastProvider>().setActiveForecast(forecast);
         },
         child: SizedBox(
-          width: 160,
-          height: 200,
+          width: 150,
           child: Card(
             elevation: 3,
             shape: RoundedRectangleBorder(
@@ -54,7 +53,7 @@ class ForecastTileWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     child: ExcludeSemantics(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
                             forecast.name,
@@ -62,22 +61,33 @@ class ForecastTileWidget extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.center,
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SvgPicture.asset(forecast.imagePath,
-                              semanticsLabel: forecast.shortForecast),
-                          Text(
-                            "${forecast.temperature}°",
-                            style: theme.textTheme.displaySmall?.copyWith(
-                              fontWeight: FontWeight.bold,
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: SvgPicture.asset(
+                                forecast.imagePath,
+                                semanticsLabel: forecast.shortForecast,
+                                height: 52,
+                              ),
+                            ),
+                          ),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "${forecast.temperature}°",
+                              style: theme.textTheme.displaySmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Text(
                             forecast.shortForecast,
                             style: theme.textTheme.bodySmall,
                             textAlign: TextAlign.center,
-                            maxLines: 2,
+                            maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],

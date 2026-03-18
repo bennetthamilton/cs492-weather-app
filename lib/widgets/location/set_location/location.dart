@@ -31,6 +31,12 @@ class _LocationWidgetState extends State<LocationWidget> {
   }
 
   @override
+  void dispose() {
+    _locationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _locationActions = context.read<LocationProvider>();
@@ -54,33 +60,43 @@ class _LocationWidgetState extends State<LocationWidget> {
   @override
   Widget build(BuildContext context) {
     final locationProvider = context.watch<LocationProvider>();
+    final currentLocation = locationProvider.location;
+    final locationText = currentLocation != null
+        ? "${currentLocation.city}, ${currentLocation.state} ${currentLocation.zip}"
+        : "No location selected";
 
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        children: [
-          TextField(
-            controller: _locationController,
-            decoration: InputDecoration(
-              labelText: "Enter Location",
-              errorText: _showError ? "Error: Must Type Location" : null,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: _locationController,
+              decoration: InputDecoration(
+                labelText: "Enter Location",
+                errorText: _showError ? "Error: Must Type Location" : null,
+                border: const OutlineInputBorder(),
+              ),
+              textInputAction: TextInputAction.search,
+              onSubmitted: (_) => _setLocation(),
             ),
-          ),
-          LocationButtons(
-            setLocation: _setLocation,
-            setLocationFromGps: _locationActions.setLocationFromGps,
-            clearLocation: _clearLocation,
-          ),
-          Text(
-            locationProvider.location != null
-                ? "${locationProvider.location?.city}, ${locationProvider.location?.state} ${locationProvider.location?.zip}"
-                : "No Location...",
-          ),
-          SizedBox(
-              height: 500,
-              width: 500,
-              child: SavedLocations())
-        ],
+            LocationButtons(
+              setLocation: _setLocation,
+              setLocationFromGps: _locationActions.setLocationFromGps,
+              clearLocation: _clearLocation,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Text(
+                locationText,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const Expanded(child: SavedLocations()),
+          ],
+        ),
       ),
     );
   }

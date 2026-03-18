@@ -9,11 +9,16 @@ class ForecastsRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final forecastProvider = context.read<ForecastProvider>();
-    return ListView(
-        scrollDirection: Axis.horizontal,
-        children: forecastProvider.forecasts
-            .map((forecast) => ForecastTileWidget(forecast: forecast))
-            .toList());
+    final forecastProvider = context.watch<ForecastProvider>();
+
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      scrollDirection: Axis.horizontal,
+      itemCount: forecastProvider.forecasts.length,
+      separatorBuilder: (_, __) => const SizedBox(width: 4),
+      itemBuilder: (context, index) => ForecastTileWidget(
+        forecast: forecastProvider.forecasts[index],
+      ),
+    );
   }
 }

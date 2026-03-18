@@ -21,32 +21,54 @@ class WeatherAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final locationProvider = context.watch<LocationProvider>();
     final themeProvider = context.watch<ThemeProvider>();
+    final location = locationProvider.location;
 
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      title: Text(title),
+      title: Text(
+        title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       actions: [
         Semantics(
           label: "Dark Mode Switch",
           child: Switch(
-              value: themeProvider.darkMode,
-              onChanged: (value) => {themeProvider.setDarkMode(value)}),
+            value: themeProvider.darkMode,
+            onChanged: (value) => themeProvider.setDarkMode(value),
+          ),
         ),
-        if (locationProvider.location != null)
+        if (location != null)
           Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Text(
-              "${locationProvider.location!.city}, ${locationProvider.location!.state}",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.5,
-                  ),
+            padding: const EdgeInsets.only(right: 12.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.28,
+              ),
+              child: Center(
+                child: Text(
+                  "${location.city}, ${location.state}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5,
+                      ),
+                ),
+              ),
             ),
           ),
       ],
       bottom: TabBar(controller: _tabController, tabs: [
-        Semantics(label: "Forecasts Tab", child: Tab(icon: Icon(Icons.sunny_snowing))),
-        Semantics(label: "Location Tab", child: Tab(icon: Icon(Icons.location_pin))),
+        Semantics(
+          label: "Forecasts Tab",
+          child: Tab(icon: Icon(Icons.sunny_snowing)),
+        ),
+        Semantics(
+          label: "Location Tab",
+          child: Tab(icon: Icon(Icons.location_pin)),
+        ),
       ]),
     );
   }
