@@ -1,4 +1,4 @@
-# Weather App (Flutter)
+# WeatherApp
 
 ## Overview
 
@@ -45,7 +45,7 @@ https://docs.flutter.dev/tools/vs-code
 Clone GitHub repository using these terminal commands:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/cs492-weather-app.git
+git clone https://github.com/bennetthamilton/cs492-weather-app.git
 cd cs492-weather-app
 ```
 
