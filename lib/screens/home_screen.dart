@@ -16,26 +16,12 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with TickerProviderStateMixin {
-  late final TabController _tabController;
+class _HomeScreenState extends State<HomeScreen> {
   bool locationSet = false;
 
   @override
   void initState() {
     super.initState();
-
-    _tabController = TabController(
-      length: 2,
-      vsync: this,
-      initialIndex: 0,
-    );
-
-    _tabController.addListener(() {
-      if (!locationSet) {
-        _tabController.animateTo(1);
-      }
-    });
 
     final themeProvider = context.read<ThemeProvider>();
     themeProvider.loadDarkModePrefs();
@@ -64,21 +50,10 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WeatherAppBar(
-        title: widget.title,
-        tabController: _tabController,
-      ),
-      body: WeatherAppBody(
-        tabController: _tabController,
-      ),
+      appBar: WeatherAppBar(title: widget.title),
+      body: const WeatherAppBody(),
     );
   }
 }

@@ -48,6 +48,7 @@ class _LocationWidgetState extends State<LocationWidget> {
       });
     } else {
       _locationActions.setLocationFromString(_locationController.text);
+      _locationController.clear();
     }
   }
 
@@ -59,40 +60,38 @@ class _LocationWidgetState extends State<LocationWidget> {
         ? "${currentLocation.city}, ${currentLocation.state} ${currentLocation.zip}"
         : "No location selected";
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: _locationController,
-              decoration: InputDecoration(
-                labelText: "Enter Location",
-                errorText: _showError ? "Error: Must Type Location" : null,
-                border: const OutlineInputBorder(),
-              ),
-              textInputAction: TextInputAction.search,
-              onSubmitted: (_) => _setLocation(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextField(
+            controller: _locationController,
+            decoration: InputDecoration(
+              labelText: "Enter Location",
+              errorText: _showError ? "Error: Must Type Location" : null,
+              border: const OutlineInputBorder(),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: ElevatedButton(
-                onPressed: _locationActions.setLocationFromGps,
-                child: const Text("Use Current Location"),
-              ),
+            textInputAction: TextInputAction.search,
+            onSubmitted: (_) => _setLocation(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: ElevatedButton(
+              onPressed: _locationActions.setLocationFromGps,
+              child: const Text("Use Current Location"),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Text(
-                locationText,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Text(
+              locationText,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            const Expanded(child: SavedLocations()),
-          ],
-        ),
+          ),
+          const SavedLocations(),
+        ],
       ),
     );
   }

@@ -11,10 +11,20 @@ class SavedLocations extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locationProvider = context.watch<LocationProvider>();
+
+    if (locationProvider.savedLocations.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Text("No saved locations yet."),
+      );
+    }
+
     return ListView(
-        scrollDirection: Axis.vertical,
-        children: locationProvider.savedLocations
-            .map((location) => SavedLocation(location: location))
-            .toList());
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: locationProvider.savedLocations
+          .map((location) => SavedLocation(location: location))
+          .toList(),
+    );
   }
 }

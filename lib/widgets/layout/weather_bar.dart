@@ -7,15 +7,12 @@ class WeatherAppBar extends StatelessWidget implements PreferredSizeWidget {
   const WeatherAppBar({
     super.key,
     required this.title,
-    required TabController tabController,
-  }) : _tabController = tabController;
+  });
 
   final String title;
-  final TabController _tabController;
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight + kTextTabBarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +28,12 @@ class WeatherAppBar extends StatelessWidget implements PreferredSizeWidget {
         overflow: TextOverflow.ellipsis,
       ),
       actions: [
-        Semantics(
-          label: "Dark Mode Switch",
-          child: Switch(
-            value: themeProvider.darkMode,
-            onChanged: themeProvider.setDarkMode,
-          ),
-        ),
         if (location != null)
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.28,
+                maxWidth: MediaQuery.of(context).size.width * 0.35,
               ),
               child: Center(
                 child: Text(
@@ -61,19 +51,6 @@ class WeatherAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
       ],
-      bottom: TabBar(
-        controller: _tabController,
-        tabs: [
-          Semantics(
-            label: "Forecasts Tab",
-            child: Tab(icon: Icon(Icons.sunny_snowing)),
-          ),
-          Semantics(
-            label: "Location Tab",
-            child: Tab(icon: Icon(Icons.location_pin)),
-          ),
-        ],
-      ),
     );
   }
 }
