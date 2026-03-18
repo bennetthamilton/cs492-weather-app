@@ -98,6 +98,7 @@ class _DetailedForecastState extends State<DetailedForecast> {
   Widget build(BuildContext context) {
     final activeForecast = context.watch<ForecastProvider>().activeForecast;
     final themeProvider = context.read<ThemeProvider>();
+    final currentLocation = context.watch<LocationProvider>().location;
 
     if (activeForecast == null) {
       return SizedBox(
@@ -142,7 +143,10 @@ class _DetailedForecastState extends State<DetailedForecast> {
                 ),
               ),
 
-              DetailedForecastText(activeForecast: activeForecast),
+              DetailedForecastText(
+                activeForecast: activeForecast,
+                cityName: currentLocation!.city,
+              ),
 
               if (_imageUrl == null)
                 const Center(
