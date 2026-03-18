@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:weatherapp/providers/forecast_provider.dart';
 import 'package:weatherapp/providers/location_provider.dart';
 import 'package:weatherapp/app/theme/theme_provider.dart';
-import 'package:weatherapp/widgets/layout/weather_app_bar.dart';
+import 'package:weatherapp/widgets/layout/weather_bar.dart';
 import 'package:weatherapp/widgets/layout/weather_body.dart';
 
 class HomeScreen extends StatefulWidget {
