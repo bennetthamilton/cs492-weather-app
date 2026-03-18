@@ -105,7 +105,11 @@ class _DetailedForecastState extends State<DetailedForecast> {
         child: Center(
           child: Text(
             'Select a forecast to see details',
-            style: TextStyle(color: themeProvider.grey),
+            style: TextStyle(
+              color: themeProvider.secondaryTextColor,
+              fontSize: 16,
+              fontStyle: FontStyle.italic,
+            ),
           ),
         ),
       );

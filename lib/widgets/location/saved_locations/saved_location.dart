@@ -16,7 +16,7 @@ class SavedLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locationProvider = context.watch<LocationProvider>();
-    final themeProvider = context.read<ThemeProvider>();
+    final themeProvider = context.watch<ThemeProvider>();
 
     void setLocation() {
       locationProvider.setLocation(location);
@@ -51,7 +51,7 @@ class SavedLocation extends StatelessWidget {
                       "${location.state} ${location.zip}",
                       style: TextStyle(
                         fontSize: 14,
-                        color: themeProvider.grey,
+                        color: themeProvider.secondaryTextColor,
                       ),
                     ),
                   ],

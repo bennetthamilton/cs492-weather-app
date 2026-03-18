@@ -22,9 +22,9 @@ class WeatherAppBar extends StatelessWidget implements PreferredSizeWidget {
     final locationProvider = context.watch<LocationProvider>();
     final themeProvider = context.watch<ThemeProvider>();
     final location = locationProvider.location;
+    final theme = Theme.of(context);
 
     return AppBar(
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       title: Text(
         title,
         maxLines: 1,
@@ -35,7 +35,7 @@ class WeatherAppBar extends StatelessWidget implements PreferredSizeWidget {
           label: "Dark Mode Switch",
           child: Switch(
             value: themeProvider.darkMode,
-            onChanged: (value) => themeProvider.setDarkMode(value),
+            onChanged: themeProvider.setDarkMode,
           ),
         ),
         if (location != null)
@@ -51,25 +51,29 @@ class WeatherAppBar extends StatelessWidget implements PreferredSizeWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   softWrap: false,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.5,
-                      ),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.5,
+                    color: themeProvider.secondaryTextColor,
+                  ),
                 ),
               ),
             ),
           ),
       ],
-      bottom: TabBar(controller: _tabController, tabs: [
-        Semantics(
-          label: "Forecasts Tab",
-          child: Tab(icon: Icon(Icons.sunny_snowing)),
-        ),
-        Semantics(
-          label: "Location Tab",
-          child: Tab(icon: Icon(Icons.location_pin)),
-        ),
-      ]),
+      bottom: TabBar(
+        controller: _tabController,
+        tabs: [
+          Semantics(
+            label: "Forecasts Tab",
+            child: Tab(icon: Icon(Icons.sunny_snowing)),
+          ),
+          Semantics(
+            label: "Location Tab",
+            child: Tab(icon: Icon(Icons.location_pin)),
+          ),
+        ],
+      ),
     );
   }
 }

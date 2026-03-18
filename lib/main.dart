@@ -24,22 +24,18 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
+
     return MaterialApp(
       showSemanticsDebugger: false,
-      title: 'CS492',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber, brightness: Brightness.light),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber, brightness: Brightness.dark),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'CS492'),
+      title: 'WeatherApp',
+      theme: themeProvider.lightTheme,
+      darkTheme: themeProvider.darkTheme,
       themeMode: themeProvider.darkMode ? ThemeMode.dark : ThemeMode.light,
+      home: const MyHomePage(title: 'WeatherApp'),
     );
   }
 }

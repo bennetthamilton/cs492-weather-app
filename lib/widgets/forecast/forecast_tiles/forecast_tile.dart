@@ -18,8 +18,8 @@ class ForecastTileWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     final accentColor = forecast.isDaytime
-        ? themeProvider.daytimeColor
-        : themeProvider.nighttimeColor;
+        ? themeProvider.accentColor
+        : themeProvider.accentColor.darken(0.2);
 
     final semanticsString =
         "${forecast.name}, ${forecast.shortForecast}, ${forecast.detailedForecast}";
