@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:weatherapp/models/location_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/location_database.dart';
@@ -10,13 +11,21 @@ class LocationProvider extends ChangeNotifier {
 
   LocationDatabase? _db;
 
-  void openDatabase() async {
+  Future<void> openDatabase() async {
     _db = await LocationDatabase.open();
     await loadSavedLocations();
-    loadSharedZip();
+    await loadSharedZip();
   }
 
-  void loadSharedZip() async {
+  Future<void> initializeLocationOnLaunch() async {
+    await openDatabase();
+
+    if (location == null) {
+      await setLocationFromGps();
+    }
+  }
+
+  Future<void> loadSharedZip() async {
     if (location == null && savedLocations.isNotEmpty) {
       final prefs = SharedPreferencesAsync();
       String? savedZip = await prefs.getString("savedZip");
@@ -45,23 +54,14 @@ class LocationProvider extends ChangeNotifier {
     }
   }
 
-  void storeSavedLocation(Location loc) async {
+  Future<void> storeSavedLocation(Location loc) async {
     if (_db != null) {
       await _db?.insertLocation(loc);
       loadSavedLocations();
     }
   }
 
-  void setLocationFromGps() async {
-    location = await getLocationFromGps();
-
-    if (location != null) {
-      storeSavedLocation(location!);
-    }
-    saveZipToPrefs();
-  }
-
-  void setLocationFromString(String? locationString) async {
+  Future<void> setLocationFromString(String? locationString) async {
     if (locationString != null && locationString.trim().isNotEmpty) {
       location = await getLocationFromString(locationString);
     } else {
@@ -69,18 +69,52 @@ class LocationProvider extends ChangeNotifier {
     }
 
     if (location != null) {
-      storeSavedLocation(location!);
+      await storeSavedLocation(location!);
     }
-    saveZipToPrefs();
+
+    notifyListeners();
+    await saveZipToPrefs();
   }
 
-  void setLocation(Location loc) {
+  Future<void> setLocationFromGps() async {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.denied) {
+      return;
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      await Geolocator.openAppSettings();
+      return;
+    }
+
+    location = await getLocationFromGps();
+
+    if (location != null) {
+      await storeSavedLocation(location!);
+    }
+
+    notifyListeners();
+    await saveZipToPrefs();
+  }
+
+  Future<void> setLocation(Location loc) async {
     location = loc;
     notifyListeners();
     saveZipToPrefs();
   }
 
-  void saveZipToPrefs() async {
+  Future<void> saveZipToPrefs() async {
     final prefs = SharedPreferencesAsync();
     if (location != null) {
       await prefs.setString("savedZip", location!.zip);

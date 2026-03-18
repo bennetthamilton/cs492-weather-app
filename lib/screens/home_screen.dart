@@ -25,20 +25,27 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
 
-    final locationProvider = context.read<LocationProvider>();
-    locationProvider.openDatabase();
-
-    final themeProvider = context.read<ThemeProvider>();
-    themeProvider.loadDarkModePrefs();
-
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.index = 1;
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: 0,
+    );
 
     _tabController.addListener(() {
       if (!locationSet) {
         _tabController.animateTo(1);
       }
     });
+
+    final themeProvider = context.read<ThemeProvider>();
+    themeProvider.loadDarkModePrefs();
+
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    final locationProvider = context.read<LocationProvider>();
+    await locationProvider.initializeLocationOnLaunch();
   }
 
   @override
